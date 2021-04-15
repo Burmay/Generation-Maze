@@ -27,49 +27,46 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         public static bool[,] bv;
-        int m; // Я знаю, магические числа - зло. Это количество клеток вертикль/горизонталь.
+        int m; // Я знаю, магические переменные - зло. Это количество клеток вертикль/горизонталь.
         int n;
         string[,] name;
         Random random = new Random();
         public MainWindow()
         {
             InitializeComponent();
-            m = 27;
-            n = 23;
-            name = new string[m, n];
-            bv = new bool[m, n];
+            m = 28;
+            n = 24;
+            name = new string[n, m];
+            bv = new bool[n, m];
 
             // Генерация случайного заполнения массива. Позже в этом блоке будет писаться сам алгоритм процедурной генерации.
 
-            for(int i =0; i < m; i++)
+            for(int i = 0; i < n; i++)
             {
-                for(int j = 0; j < n; j++)
+                for(int j = 0; j < m; j++)
                 {
-                    if (random.Next(0, 1) == 0) bv[i, j] = false;
+                    if (random.Next(0, 2) == 0) bv[i, j] = false;
                     else bv[i, j] = true;
                 }
             }
 
             
             // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < m; j++)
                 {
                     name[i, j] = $"Box{i}_{j}";
                 }
             }
 
-            // а здесь должен вызываться метод, передающий наш процедурно сгенерированный массив вля отборажения в форму.
-            // однако, мне пока неизвестно, как сделать поля открытыми для осуществления позднего связываения. Работаю над этим
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < m; j++)
                 {
-                    // Эта строка вызвывает exeption, из-за того, что поля в xaml закрытые.
+                    // Эта строка является магией
                     FieldInfo field = typeof(MainWindow).GetField(name[i, j],
                         BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-
                     if (field != null && field.GetValue(this) is TextBox textBox)
                     {
                         textBox.Background = bv[i, j] ? Brushes.Black : Brushes.Red;
