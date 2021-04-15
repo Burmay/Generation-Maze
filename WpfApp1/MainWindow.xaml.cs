@@ -67,13 +67,13 @@ namespace WpfApp1
                 for (int j = 0; j < n; j++)
                 {
                     // Эта строка вызвывает exeption, из-за того, что поля в xaml закрытые.
-                    FieldInfo fi = typeof(MainWindow).GetField(name[i,j]);
-                    object fieldValue = fi.GetValue(Origin);
-                    
+                    FieldInfo field = typeof(MainWindow).GetField(name[i, j],
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-                    // выглядеть дожно так, но не для одной ячейки, а для всех.
-                    if (bv[i, j] == true) Box0_0.Background = Brushes.Black;
-                    else Box0_0.Background = Brushes.Red;
+                    if (field != null && field.GetValue(this) is TextBox textBox)
+                    {
+                        textBox.Background = bv[i, j] ? Brushes.Black : Brushes.Red;
+                    }
                 }
             }
         }
