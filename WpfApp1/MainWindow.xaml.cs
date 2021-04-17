@@ -27,7 +27,8 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         public static bool[,] bv;
-        int m; // Я знаю, магические переменные - зло. Это количество клеток вертикль/горизонталь.
+        public static bool[,] chain;
+        int m; 
         int n;
         string[,] name;
         Random random = new Random();
@@ -38,45 +39,98 @@ namespace WpfApp1
             m = 30;
             name = new string[n, m];
             bv = new bool[n, m];
+            chain = new bool[1, 100];
+            Dictionary<int, int> test = new Dictionary<int, int>();
 
-            void V1()
+
+
+            // main algorithm
+            void V2()
             {
                 for (int i = 2; i < n - 2; i++)
                 {
                     for (int j = 2; j < m - 2; j++)
                     {
                         //find the left neighbors 
-                        if (bv[i - 1, j] == true)
+                        if (bv[i, j-1] == true)
                         {
                             //find out how to do with them 
-                            if (bv[i - 2, j] == false && bv[i - 1, j + 1] == false && bv[i - 1, j - 1] == false)
+                            if (bv[i, j - 2] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 1] == false)
                             {
                                 bv[i, j] = true;
                             }
-                            else if (random.Next(0, 2) == 0) bv[i, j] = true;
+                            else if (random.Next(0, 10) == 0) bv[i, j] = true;
                             else bv[i, j] = false;
                         }
                         // find the top neighbors 
-                        else if (bv[i, j + 1] == true)
+                        else if (bv[i + 1, j] == true)
                         {
                             //find out how to do with them
-                            if (bv[i, j + 2] == false && bv[i - 1, j + 1] == false && bv[i + 1, j + 1] == false)
+                            if (bv[i+2, j] == false && bv[i + 1, j - 1] == false && bv[i + 1, j + 1] == false)
                             {
                                 bv[i, j] = true;
                             }
                             else if (random.Next(0, 2) == 0) bv[i, j] = true;
                             else bv[i, j] = false;
                         }
+                        // if the neighbor is below
+                        else if (bv[i - 1, j] == true)
+                        {
+                            //find out how to do with them
+                            if (bv[i - 2, j] == false && bv[i - 1, j - 1] == false && bv[i - 1, j + 1] == false)
+                            {
+                                bv[i, j] = true;
+                            }
+                            else if (random.Next(0, 2) == 0) bv[i, j] = true;
+                            else bv[i, j] = false;
+                        }
+                        // if the neighbor is right
                         // if neighbors not find
                         else
                         {
-                            if (random.Next(0, 10) >= 9) bv[i, j] = true;
+                            if (random.Next(0, 10) >= 8) bv[i, j] = true;
                             else bv[i, j] = false;
+                        }
+                        
+                    }
+                }
+            }
+            // Сleaner 
+            void Cliner()
+            {
+                for(int i =2; i < n-2; i++)
+                {
+                    for(int j =2; j < m-2; j++)
+                    {
+                        if (bv[i,j] == true && bv[i-1, j] == true && bv[i, j+1] == true && bv[i-1, j+1] == true)
+                        {
+                            if (bv[i, j - 1] != true && bv[i + 1, j] != true) { bv[i, j] = false; }
+                            else if (bv[i, j + 2] != true && bv[i + 1, j+1] != true) { bv[i, j+1] = false;}
+                            else if (bv[i-1, j + 2] != true && bv[i - 2, j+1] != true) { bv[i - 1, j + 1] = false;}
+                            else if (bv[i -1, j - 1] != true && bv[i - 2, j] != true) { bv[i - 1, j] = false; }
+                            
+                            else if (bv[i, j - 1] != true || bv[i + 1, j] != true) { bv[i, j] = false; }
+                            else if (bv[i, j + 2] != true || bv[i + 1, j + 1] != true) { bv[i, j + 1] = false; }
+                            else if (bv[i - 1, j + 2] != true || bv[i - 2, j + 1] != true) { bv[i - 1, j + 1] = false; }
+                            else if (bv[i - 1, j - 1] != true || bv[i - 2, j] != true) { bv[i - 1, j] = false; }
                         }
                     }
                 }
             }
-
+            void Сomplementofdiagonals()
+            {
+                for (int i = 2; i < n - 2; i++)
+                {
+                    for (int j = 2; j < m - 2; j++)
+                    {
+                        //elimination of diagonals - blakades. Сarriage up 
+                        if (bv[i, j] == true && bv[i - 1, j + 1] == true || bv[i, j] == true && bv[i - 1, j - 1] == true)
+                        {
+                            bv[i - 1, j] = true;
+                        }
+                    }
+                }
+            }
             // генерация контура
             for (int i = 0; i < n; i++)
             {
@@ -96,16 +150,28 @@ namespace WpfApp1
                     }
                     else
                     {
-                        //if (random.Next(0, 10) > 8) bv[i, j] = true;
-                        bv[i, j] = false;
+                        if (random.Next(0, 20) > 18) bv[i, j] = true;
+                        else bv[i, j] = false;
                     }
                 }
             }
-            // main block of logic of the algorithm
-            V1();
-
-                    // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
-                    for (int i = 1; i < n-1; i++)
+            
+            void intelligenceChain()
+            {
+                for (int i = 2; i < n;)
+                {
+                    for (int j = 2; i < m;)
+                    {
+                        test.Add(i,j);
+                    }
+                }
+            }
+            V2();
+            Сomplementofdiagonals();
+            Cliner();
+           // intelligenceChain();
+            // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
+            for (int i = 1; i < n-1; i++)
                           {
                           for (int j = 1; j < m-1; j++)
                           {
