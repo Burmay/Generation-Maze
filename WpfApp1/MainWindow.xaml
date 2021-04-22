@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="MainWindow" Height="900" Width="1000">
     <Grid x:Name="Origin">
         <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -762,6 +766,122 @@
         <TextBox x:Name="Box23_25" Grid.Row="23" Grid.Column="25"/>
         <TextBox x:Name="Box23_26" Grid.Row="23" Grid.Column="26"/>
         <TextBox x:Name="Box23_27" Grid.Row="23" Grid.Column="27"/>
+
+        <TextBox x:Name="Box24_0" Grid.Row="24" Grid.Column="0"/>
+        <TextBox x:Name="Box24_1" Grid.Row="24" Grid.Column="1" />
+        <TextBox x:Name="Box24_2" Grid.Row="24" Grid.Column="2" />
+        <TextBox x:Name="Box24_3" Grid.Row="24" Grid.Column="3"/>
+        <TextBox x:Name="Box24_4" Grid.Row="24" Grid.Column="4" />
+        <TextBox x:Name="Box24_5" Grid.Row="24" Grid.Column="5"/>
+        <TextBox x:Name="Box24_6" Grid.Row="24" Grid.Column="6"/>
+        <TextBox x:Name="Box24_7" Grid.Row="24" Grid.Column="7"/>
+        <TextBox x:Name="Box24_8" Grid.Row="24" Grid.Column="8"/>
+        <TextBox x:Name="Box24_9" Grid.Row="24" Grid.Column="9"/>
+        <TextBox x:Name="Box24_10" Grid.Row="24" Grid.Column="10"/>
+        <TextBox x:Name="Box24_11" Grid.Row="24" Grid.Column="11"/>
+        <TextBox x:Name="Box24_12" Grid.Row="24" Grid.Column="12"/>
+        <TextBox x:Name="Box24_13" Grid.Row="24" Grid.Column="13"/>
+        <TextBox x:Name="Box24_14" Grid.Row="24" Grid.Column="14"/>
+        <TextBox x:Name="Box24_15" Grid.Row="24" Grid.Column="15"/>
+        <TextBox x:Name="Box24_16" Grid.Row="24" Grid.Column="16"/>
+        <TextBox x:Name="Box24_17" Grid.Row="24" Grid.Column="17"/>
+        <TextBox x:Name="Box24_18" Grid.Row="24" Grid.Column="18"/>
+        <TextBox x:Name="Box24_19" Grid.Row="24" Grid.Column="19"/>
+        <TextBox x:Name="Box24_20" Grid.Row="24" Grid.Column="20"/>
+        <TextBox x:Name="Box24_21" Grid.Row="24" Grid.Column="21"/>
+        <TextBox x:Name="Box24_22" Grid.Row="24" Grid.Column="22"/>
+        <TextBox x:Name="Box24_23" Grid.Row="24" Grid.Column="23"/>
+        <TextBox x:Name="Box24_24" Grid.Row="24" Grid.Column="24"/>
+        <TextBox x:Name="Box24_25" Grid.Row="24" Grid.Column="25"/>
+        <TextBox x:Name="Box24_26" Grid.Row="24" Grid.Column="26"/>
+        <TextBox x:Name="Box24_27" Grid.Row="24" Grid.Column="27"/>
+
+        <TextBox x:Name="Box25_0" Grid.Row="25" Grid.Column="0"/>
+        <TextBox x:Name="Box25_1" Grid.Row="25" Grid.Column="1" />
+        <TextBox x:Name="Box25_2" Grid.Row="25" Grid.Column="2" />
+        <TextBox x:Name="Box25_3" Grid.Row="25" Grid.Column="3"/>
+        <TextBox x:Name="Box25_4" Grid.Row="25" Grid.Column="4" />
+        <TextBox x:Name="Box25_5" Grid.Row="25" Grid.Column="5"/>
+        <TextBox x:Name="Box25_6" Grid.Row="25" Grid.Column="6"/>
+        <TextBox x:Name="Box25_7" Grid.Row="25" Grid.Column="7"/>
+        <TextBox x:Name="Box25_8" Grid.Row="25" Grid.Column="8"/>
+        <TextBox x:Name="Box25_9" Grid.Row="25" Grid.Column="9"/>
+        <TextBox x:Name="Box25_10" Grid.Row="25" Grid.Column="10"/>
+        <TextBox x:Name="Box25_11" Grid.Row="25" Grid.Column="11"/>
+        <TextBox x:Name="Box25_12" Grid.Row="25" Grid.Column="12"/>
+        <TextBox x:Name="Box25_13" Grid.Row="25" Grid.Column="13"/>
+        <TextBox x:Name="Box25_14" Grid.Row="25" Grid.Column="14"/>
+        <TextBox x:Name="Box25_15" Grid.Row="25" Grid.Column="15"/>
+        <TextBox x:Name="Box25_16" Grid.Row="25" Grid.Column="16"/>
+        <TextBox x:Name="Box25_17" Grid.Row="25" Grid.Column="17"/>
+        <TextBox x:Name="Box25_18" Grid.Row="25" Grid.Column="18"/>
+        <TextBox x:Name="Box25_19" Grid.Row="25" Grid.Column="19"/>
+        <TextBox x:Name="Box25_20" Grid.Row="25" Grid.Column="20"/>
+        <TextBox x:Name="Box25_21" Grid.Row="25" Grid.Column="21"/>
+        <TextBox x:Name="Box25_22" Grid.Row="25" Grid.Column="22"/>
+        <TextBox x:Name="Box25_23" Grid.Row="25" Grid.Column="23"/>
+        <TextBox x:Name="Box25_24" Grid.Row="25" Grid.Column="24"/>
+        <TextBox x:Name="Box25_25" Grid.Row="25" Grid.Column="25"/>
+        <TextBox x:Name="Box25_26" Grid.Row="25" Grid.Column="26"/>
+        <TextBox x:Name="Box25_27" Grid.Row="25" Grid.Column="27"/>
+
+        <TextBox x:Name="Box26_0" Grid.Row="26" Grid.Column="0"/>
+        <TextBox x:Name="Box26_1" Grid.Row="26" Grid.Column="1" />
+        <TextBox x:Name="Box26_2" Grid.Row="26" Grid.Column="2" />
+        <TextBox x:Name="Box26_3" Grid.Row="26" Grid.Column="3"/>
+        <TextBox x:Name="Box26_4" Grid.Row="26" Grid.Column="4" />
+        <TextBox x:Name="Box26_5" Grid.Row="26" Grid.Column="5"/>
+        <TextBox x:Name="Box26_6" Grid.Row="26" Grid.Column="6"/>
+        <TextBox x:Name="Box26_7" Grid.Row="26" Grid.Column="7"/>
+        <TextBox x:Name="Box26_8" Grid.Row="26" Grid.Column="8"/>
+        <TextBox x:Name="Box26_9" Grid.Row="26" Grid.Column="9"/>
+        <TextBox x:Name="Box26_10" Grid.Row="26" Grid.Column="10"/>
+        <TextBox x:Name="Box26_11" Grid.Row="26" Grid.Column="11"/>
+        <TextBox x:Name="Box26_12" Grid.Row="26" Grid.Column="12"/>
+        <TextBox x:Name="Box26_13" Grid.Row="26" Grid.Column="13"/>
+        <TextBox x:Name="Box26_14" Grid.Row="26" Grid.Column="14"/>
+        <TextBox x:Name="Box26_15" Grid.Row="26" Grid.Column="15"/>
+        <TextBox x:Name="Box26_16" Grid.Row="26" Grid.Column="16"/>
+        <TextBox x:Name="Box26_17" Grid.Row="26" Grid.Column="17"/>
+        <TextBox x:Name="Box26_18" Grid.Row="26" Grid.Column="18"/>
+        <TextBox x:Name="Box26_19" Grid.Row="26" Grid.Column="19"/>
+        <TextBox x:Name="Box26_20" Grid.Row="26" Grid.Column="20"/>
+        <TextBox x:Name="Box26_21" Grid.Row="26" Grid.Column="21"/>
+        <TextBox x:Name="Box26_22" Grid.Row="26" Grid.Column="22"/>
+        <TextBox x:Name="Box26_23" Grid.Row="26" Grid.Column="23"/>
+        <TextBox x:Name="Box26_24" Grid.Row="26" Grid.Column="24"/>
+        <TextBox x:Name="Box26_25" Grid.Row="26" Grid.Column="25"/>
+        <TextBox x:Name="Box26_26" Grid.Row="26" Grid.Column="26"/>
+        <TextBox x:Name="Box26_27" Grid.Row="26" Grid.Column="27"/>
+
+        <TextBox x:Name="Box27_0" Grid.Row="27" Grid.Column="0"/>
+        <TextBox x:Name="Box27_1" Grid.Row="27" Grid.Column="1" />
+        <TextBox x:Name="Box27_2" Grid.Row="27" Grid.Column="2" />
+        <TextBox x:Name="Box27_3" Grid.Row="27" Grid.Column="3"/>
+        <TextBox x:Name="Box27_4" Grid.Row="27" Grid.Column="4" />
+        <TextBox x:Name="Box27_5" Grid.Row="27" Grid.Column="5"/>
+        <TextBox x:Name="Box27_6" Grid.Row="27" Grid.Column="6"/>
+        <TextBox x:Name="Box27_7" Grid.Row="27" Grid.Column="7"/>
+        <TextBox x:Name="Box27_8" Grid.Row="27" Grid.Column="8"/>
+        <TextBox x:Name="Box27_9" Grid.Row="27" Grid.Column="9"/>
+        <TextBox x:Name="Box27_10" Grid.Row="27" Grid.Column="10"/>
+        <TextBox x:Name="Box27_11" Grid.Row="27" Grid.Column="11"/>
+        <TextBox x:Name="Box27_12" Grid.Row="27" Grid.Column="12"/>
+        <TextBox x:Name="Box27_13" Grid.Row="27" Grid.Column="13"/>
+        <TextBox x:Name="Box27_14" Grid.Row="27" Grid.Column="14"/>
+        <TextBox x:Name="Box27_15" Grid.Row="27" Grid.Column="15"/>
+        <TextBox x:Name="Box27_16" Grid.Row="27" Grid.Column="16"/>
+        <TextBox x:Name="Box27_17" Grid.Row="27" Grid.Column="17"/>
+        <TextBox x:Name="Box27_18" Grid.Row="27" Grid.Column="18"/>
+        <TextBox x:Name="Box27_19" Grid.Row="27" Grid.Column="19"/>
+        <TextBox x:Name="Box27_20" Grid.Row="27" Grid.Column="20"/>
+        <TextBox x:Name="Box27_21" Grid.Row="27" Grid.Column="21"/>
+        <TextBox x:Name="Box27_22" Grid.Row="27" Grid.Column="22"/>
+        <TextBox x:Name="Box27_23" Grid.Row="27" Grid.Column="23"/>
+        <TextBox x:Name="Box27_24" Grid.Row="27" Grid.Column="24"/>
+        <TextBox x:Name="Box27_25" Grid.Row="27" Grid.Column="25"/>
+        <TextBox x:Name="Box27_26" Grid.Row="27" Grid.Column="26"/>
+        <TextBox x:Name="Box27_27" Grid.Row="27" Grid.Column="27"/>
 
     </Grid>
 
