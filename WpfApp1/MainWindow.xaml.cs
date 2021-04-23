@@ -21,7 +21,7 @@ namespace WpfApp1
         {
             Random random = new Random();
             InitializeComponent();
-            int size = 30;
+            int size = 50;
             int bustOfWhites = (int)((size * size / 3) * 2);
             int[] x = new int[bustOfWhites];
             int[] y = new int[bustOfWhites];
