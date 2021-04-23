@@ -64,8 +64,6 @@ namespace WpfApp1
             //This is really needed ... 
 
 
-
-            // main algorithm
             void V2()
             {
                 for (int i = 2; i < n - 2; i++)
@@ -233,7 +231,6 @@ namespace WpfApp1
                 }
 
                 // Меняем названия групп на последовательные
-
                 //Для этого подбирает исходные имена групп
                 for(int i = 0; i < y.Length; i++)
                 {
@@ -252,46 +249,6 @@ namespace WpfApp1
                         }
                     }
                 }
-
-                //select white groups
-                #region bad select white groups
-                // bad select white groups
-                //int g = 0;
-                //for (int i = 0; i < z; i++)
-                //{
-                //    for (int j = 0; j < z; j++)
-                //    {
-                //        // совпадают ли два числа?
-                //        if(y[i] == y[j] - 1 && x[i] == x[j] || y[i] == y[j] + 1 && x[i] == x[j] || y[i] == y[j] && x[i] == x[j] + 1 || y[i] == y[j] && x[i] == x[j] - 1)
-                //        {
-                //            for (int l = 0; l < 100; l++)
-                //            {
-                //                //есть ли вообще число сопоставления в базе? Реверсивный цикл
-                //                for(int k = l; k > 0; k--)
-                //                {
-                //                    // граничит ли число i с числом из базы? 
-                //                    if (y[i] == y[l] - 1 && x[i] == x[l] || y[i] == y[l] + 1 && x[i] == x[l] || y[i] == y[l] && x[i] == x[l] + 1 || y[i] == y[l] && x[i] == x[l] - 1)
-                //                    {
-                //                        p[g] = i;
-                //                    }
-                //                    // граничит ли число j с числом из базы?
-                //                    if (y[j] == y[l] - 1 && x[j] == x[l] || y[j] == y[l] + 1 && x[j] == x[l] || y[j] == y[l] && x[j] == x[l] + 1 || y[j] == y[l] && x[j] == x[l] - 1)
-                //                    {
-                //                        p[g] = j;
-                //                    }
-                //                }
-                //                
-                //             p[i] = g;
-                //             p[j] = g;
-                //             g++;
-                //                
-                //            }
-                //        }
-                //    }
-                //}
-                #endregion
-
-
             }
             void Interconnection()
             {
@@ -359,7 +316,6 @@ namespace WpfApp1
                 // Расстояние, которое необходимо отложить
                 directionX = x2[point2] - x1[point1];
                 directionY = y1[point1] - y2[point2];
-
 
                 
                 if(directionX > 0)
@@ -433,14 +389,249 @@ namespace WpfApp1
                     }
                 }
             }
+            int memoryI;
+            int memoryJ;
+            void FillingEmpty()
+            {
+                for(int i=0; i < 30; i++)
+                {
+                    for(int j = 0; j < 30; j++)
+                    {
+                        if(i > 2 && j > 2 && i < 27 && j < 27)
+                        {
+                            if (bv[i, j] == true)
+                            {
+                                // если выглядывает право
+                                if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j + 1] == false)
+                                {
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение влево
+                                        else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вверх
+                                        else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вниз
+                                        else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
+                                // если выглядывает влево
+                                if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j - 1] == false)
+                                {
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение влево
+                                        else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вверх
+                                        else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вниз
+                                        else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
+                                // если выглядывает вверх
+                                if (bv[i - 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
+                                {
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение влево
+                                        else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вверх
+                                        else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вниз
+                                        else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
+                                // если выглядывает вниз
+                                if (bv[i + 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
+                                {
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение влево
+                                        else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вверх
+                                        else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                            }
+                                            else { continue; }
+                                        }
+                                        //движение вниз
+                                        else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i > 2 && j > 2 && i < 27 && j < 27)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                            }
+                                            else { continue; }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
+                            }
+                        }
+                    }
+                        
+                }
+            }
 
             void MetaWorkBlok()
             {
-                //GroupAnalysisClean();
-                //GroupAnalysis();
                 Interconnection();
                 Сomplementofdiagonals();
-                //Cliner();
             }
 
                 СontourAndFuel();
@@ -450,7 +641,7 @@ namespace WpfApp1
                 GroupAnalysis();
                 Interconnection();
 
-            // нужно знать, есть ли ещё хоть одна группа
+            // узнать, есть ли ещё хоть одна группа
             for (int a = 0; a < 400; a++)
             {
                 if (metaflag == true) break;
@@ -474,6 +665,7 @@ namespace WpfApp1
                     }
                 }
             }
+            FillingEmpty();
 
             // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
             for (int i = 1; i < n - 1; i++)
