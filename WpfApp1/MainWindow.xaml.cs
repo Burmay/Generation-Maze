@@ -70,8 +70,11 @@ namespace WpfApp1
                 {
                     for (int j = 2; j < m - 2; j++)
                     {
+                        if (i == 27 && j == 27)
+                        {
+                        }
                         //find the left neighbors 
-                        if (bv[i, j - 1] == true)
+                        else if (bv[i, j - 1] == true)
                         {
                             //find out how to do with them 
                             if (bv[i, j - 2] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 1] == false)
@@ -123,14 +126,20 @@ namespace WpfApp1
                         if (bv[i, j] == true && bv[i - 1, j] == true && bv[i, j + 1] == true && bv[i - 1, j + 1] == true)
                         {
                             if (bv[i - 1, j + 2] != true && bv[i - 2, j + 1] != true) { bv[i - 1, j + 1] = false; }
-                            else if (bv[i, j + 2] != true && bv[i + 1, j + 1] != true) { bv[i, j + 1] = false; }
+                            else if (bv[i, j + 2] != true && bv[i + 1, j + 1] != true)
+                            {
+                                    bv[i, j + 1] = false;
+                            }
                             else if (bv[i - 1, j - 1] != true && bv[i - 2, j] != true) { bv[i - 1, j] = false; }
-                            else if (bv[i, j - 1] != true && bv[i + 1, j] != true) { bv[i, j] = false; }
+                            else if (bv[i, j - 1] != true && bv[i + 1, j] != true)
+                            {
+                                    bv[i, j] = false;
+                            }
 
-                            else if (bv[i, j - 1] != true || bv[i + 1, j] != true) { bv[i, j] = false; }
                             else if (bv[i, j + 2] != true || bv[i + 1, j + 1] != true) { bv[i, j + 1] = false; }
                             else if (bv[i - 1, j + 2] != true || bv[i - 2, j + 1] != true) { bv[i - 1, j + 1] = false; }
                             else if (bv[i - 1, j - 1] != true || bv[i - 2, j] != true) { bv[i - 1, j] = false; }
+                            else if (bv[i, j - 1] != true || bv[i + 1, j] != true) { bv[i, j] = false; }
                         }
                     }
                 }
@@ -375,7 +384,7 @@ namespace WpfApp1
                             bv[i, j] = false;
                         }
                         // проверка на видимые крайности
-                        else if (i == 1 || i == 28 || j == 1 || j == 28)
+                        else if (i == 1 || i == 28 || j == 1 || j == 28 || i == 27 || j == 27)
                         {
                             //генерация старта, выхода и стенок
                             if (i == 2 && j == 1 || i == 27 && j == 28 || i == 27 && j == 27) bv[i, j] = true;
@@ -638,14 +647,12 @@ namespace WpfApp1
                 V2();
                 Сomplementofdiagonals();
                 Cliner();
-                GroupAnalysis();
-                Interconnection();
 
-            // узнать, есть ли ещё хоть одна группа
+             //узнать, есть ли ещё хоть одна группа
             for (int a = 0; a < 400; a++)
             {
                 if (metaflag == true) break;
-
+            
                 for (int i = 0; i < 300; i++)
                 {
                     if (i == 0) metaNumber = g[i];
