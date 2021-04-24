@@ -22,7 +22,7 @@ namespace WpfApp1
             Random random = new Random();
             InitializeComponent();
             int size = 50;
-            int bustOfWhites = (int)((size * size / 3) * 2);
+            int bustOfWhites = (int)(size * size / 2);
             int[] x = new int[bustOfWhites];
             int[] y = new int[bustOfWhites];
             int[] g = new int[bustOfWhites];
@@ -59,9 +59,10 @@ namespace WpfApp1
             int metaNumber = 0;
             bool metaflag = false;
 
-            //
+            //FillingEmpty
             int memoryI;
             int memoryJ;
+            bool flagA;
 
 
             //Yura, please, don't hit me!...
@@ -187,26 +188,23 @@ namespace WpfApp1
                     }
                 }
             }
-            void GroupAnalysisClean()
-            {
-                for (int i = 0; i < bustOfWhites; i++)
-                {
-                    x[i] = 0;
-                    y[i] = 0;
-                    g[i] = 0;
-                    x1[i] = 0;
-                    x2[i] = 0;
-                    y1[i] = 0;
-                    y2[i] = 0;
-                    metagroups[i] = 0;
-                }
-            }
             void GroupAnalysis()
             {
-                //gathering whites together 
+                // Сleaning from previous run 
+                Array.Clear(x, 0, bustOfWhites);
+                Array.Clear(y, 0, bustOfWhites);
+                Array.Clear(g, 0, bustOfWhites);
+                Array.Clear(x1, 0, bustOfWhites);
+                Array.Clear(x2, 0, bustOfWhites);
+                Array.Clear(y1, 0, bustOfWhites);
+                Array.Clear(y2, 0, bustOfWhites);
+                Array.Clear(metagroups, 0, bustOfWhites); 
                 z = 0;
                 sequence = 0;
                 group = 0;
+                number1 = 0;
+                number2 = 0;
+                //gathering whites together
                 for (int i = 0; i < size; i++)
                 {
                     for (int j = 0; j < size; j++)
@@ -287,14 +285,7 @@ namespace WpfApp1
                         }
                     }
                 }
-            }
-            void Interconnection()
-            {
-                number1 = 0;
-                number2 = 0;
-                numberToGenerateX = 0;
-                numberToGenerateY = 0;
-                allResult = 100;
+
                 // Проверяем, есть ли нулевая группа
                 for (int i = 0; i < group; i++)
                 {
@@ -321,10 +312,15 @@ namespace WpfApp1
                         number2++;
                     }
                 }
-
+            }
+            void Interconnection()
+            {
+                
+                numberToGenerateX = 0;
+                numberToGenerateY = 0;
+                allResult = 100;
                 // находим для нашей ячейки ближайшую не нашу
 
-                // перебираем наши ячейки
                 for (int i = 0; i < bustOfWhites; i++)
                 {
                     if (y1[i] == 0)
@@ -399,7 +395,7 @@ namespace WpfApp1
                 }
             }
             void FillingEmpty()
-                {
+            {
                     for (int i = 0; i < size; i++)
                     {
                         for (int j = 0; j < size; j++)
@@ -415,47 +411,49 @@ namespace WpfApp1
                                         memoryJ = j;
                                         for (int f = 0; f < 100; f++)
                                         {
-                                            //движение вправо
-                                            if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        flagA = false;
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
+                                                if (j+1 < size - 2)
                                                 {
                                                     bv[i, j + 1] = true;
                                                     j++;
+                                                    flagA = true;
+                                                    
                                                 }
-                                                else { continue; }
                                             }
                                             //движение влево
-                                            else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                            if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
+                                                if (j - 1 > 1)
                                             {
                                                     bv[i, j - 1] = true;
                                                     j--;
-                                                }
-                                                else { continue; }
+                                                    flagA = true;
+                                            }
                                             }
                                             //движение вверх
-                                            else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                            if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
+                                                if (i - 1 > 1)
                                             {
                                                     bv[i - 1, j] = true;
                                                     i--;
-                                                }
-                                                else { continue; }
+                                                    flagA = true;
+                                            }
                                             }
                                             //движение вниз
-                                            else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                            if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
+                                                if (i + 1 < size - 2)
                                                 {
                                                     bv[i + 1, j] = true;
                                                     i++;
-                                                }
-                                                else { continue; }
+                                                     flagA = true;
                                             }
-                                            else
+                                            }
+                                            if(flagA == false)
                                             {
                                                 break;
                                             }
@@ -466,212 +464,210 @@ namespace WpfApp1
                                     // если выглядывает влево
                                     if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j - 1] == false)
                                     {
-                                        memoryI = i;
-                                        memoryJ = j;
-                                        for (int f = 0; f < 100; f++)
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        flagA = false;
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
                                         {
-                                            //движение вправо
-                                            if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                            if (j + 1 < size - 2)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j + 1] = true;
-                                                    j++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение влево
-                                            else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                            {
-                                            if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j - 1] = true;
-                                                    j--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вверх
-                                            else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                            {
-                                            if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                 {
-                                                    bv[i - 1, j] = true;
-                                                    i--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вниз
-                                            else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                   {
-                                                    bv[i + 1, j] = true;
-                                                    i++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            else
-                                            {
-                                                break;
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                                flagA = true;
+
                                             }
                                         }
-                                        i = memoryI;
-                                        j = memoryJ;
+                                        //движение влево
+                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (j - 1 > 1)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вверх
+                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i - 1 > 1)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вниз
+                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i + 1 < size - 2)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                                flagA = true;
+                                            }
+                                        }
+                                        if (flagA == false)
+                                        {
+                                            break;
+                                        }
                                     }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
                                     // если выглядывает вверх
                                     if (bv[i - 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
                                     {
-                                        memoryI = i;
-                                        memoryJ = j;
-                                        for (int f = 0; f < 100; f++)
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        flagA = false;
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
                                         {
-                                            //движение вправо
-                                            if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                            if (j + 1 < size - 2)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j + 1] = true;
-                                                    j++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение влево
-                                            else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j - 1] = true;
-                                                    j--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вверх
-                                            else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i - 1, j] = true;
-                                                    i--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вниз
-                                            else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i + 1, j] = true;
-                                                    i++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            else
-                                            {
-                                                break;
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                                flagA = true;
+
                                             }
                                         }
-                                        i = memoryI;
-                                        j = memoryJ;
+                                        //движение влево
+                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (j - 1 > 1)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вверх
+                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i - 1 > 1)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вниз
+                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i + 1 < size - 2)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                                flagA = true;
+                                            }
+                                        }
+                                        if (flagA == false)
+                                        {
+                                            break;
+                                        }
                                     }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
                                     // если выглядывает вниз
                                     if (bv[i + 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
                                     {
-                                        memoryI = i;
-                                        memoryJ = j;
-                                        for (int f = 0; f < 100; f++)
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        flagA = false;
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
                                         {
-                                            //движение вправо
-                                            if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                            if (j + 1 < size - 2)
                                             {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j + 1] = true;
-                                                    j++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение влево
-                                            else if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i, j - 1] = true;
-                                                    j--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вверх
-                                            else if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i - 1, j] = true;
-                                                    i--;
-                                                }
-                                                else { continue; }
-                                            }
-                                            //движение вниз
-                                            else if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                            {
-                                                if (i > 2 && j > 2 && i < size - 3 && j < size - 3)
-                                                {
-                                                    bv[i + 1, j] = true;
-                                                    i++;
-                                                }
-                                                else { continue; }
-                                            }
-                                            else
-                                            {
-                                                break;
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                                flagA = true;
+
                                             }
                                         }
-                                        i = memoryI;
-                                        j = memoryJ;
+                                        //движение влево
+                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (j - 1 > 1)
+                                            {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вверх
+                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i - 1 > 1)
+                                            {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вниз
+                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i + 1 < size - 2)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                                flagA = true;
+                                            }
+                                        }
+                                        if (flagA == false)
+                                        {
+                                            break;
+                                        }
                                     }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                }
                                 }
                             }
                         }
 
                     }
-                }
+            }
 
-                void MetaWorkBlok()
-                {
-                    Interconnection();
-                    Сomplementofdiagonals();
-                }
 
                 СontourAndFuel();
                 V2();
                 Сomplementofdiagonals();
                 Cliner();
 
-                //узнать, есть ли ещё хоть одна группа
-                for (int a = 0; a < 400; a++)
+                for (int a = 0; a < 1000; a++)
                 {
                     if (metaflag == true) break;
 
                     for (int i = 0; i < bustOfWhites; i++)
                     {
-                        if (i == 0) metaNumber = g[i];
-                        if (i == 299)
+                        GroupAnalysis();
+                        if(x2[0] == 0 && y2[0] == 0)
                         {
                             metaflag = true;
-                            Cliner();
                             break;
                         }
-                        GroupAnalysisClean();
-                        GroupAnalysis();
                         if (g[i] == metaNumber || g[i] == 0) { }
                         else
                         {
-                            MetaWorkBlok();
-                            break;
+                              Interconnection();
+                              break;
                         }
                     }
                 }
                 FillingEmpty();
                 Сomplementofdiagonals();
+                Cliner();
 
             // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
             for (int i = 1; i < size - 1; i++)
