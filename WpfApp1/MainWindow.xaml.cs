@@ -11,7 +11,7 @@ namespace WpfApp1
     /// </summary>
 
 
-    // Задача: создать алгоритм процедурной геренации лабиранта на произвольной площади. Один вход и выход. 
+    // Задача: создать алгоритм процедурной геренации лабиранта на произвольной площади. Один вход и выход, коридор в одну клетку.
 
 
     public partial class MainWindow : Window
@@ -22,6 +22,8 @@ namespace WpfApp1
             Random random = new Random();
             InitializeComponent();
             int size = 50;
+
+            #region Variables for methods 
             int bustOfWhites = (int)(size * size / 2);
             int[] x = new int[bustOfWhites];
             int[] y = new int[bustOfWhites];
@@ -68,21 +70,21 @@ namespace WpfApp1
             //Yura, please, don't hit me!...
             //This is really needed ... 
 
+            #endregion 
+
+            // Generating map outline, entry and exit. Random filling of the field 
             void СontourAndFuel()
             {
                 for (int i = 0; i < size; i++)
                 {
                     for (int j = 0; j < size; j++)
                     {
-                        // проверка на мнимые крайноси
                         if (i == 0 || i == size - 1 || j == 0 || j == size - 1)
                         {
                             bv[i, j] = false;
                         }
-                        // проверка на видимые крайности
                         else if (i == 1 || i == size - 2 || j == 1 || j == size - 2 || i == size - 3 || j == size - 3)
                         {
-                            //генерация старта, выхода и стенок
                             if (i == 2 && j == 1 || i == size - 3 && j == size - 2 || i == size - 3 && j == size - 3) bv[i, j] = true;
                             else bv[i, j] = false;
                         }
@@ -94,17 +96,15 @@ namespace WpfApp1
                     }
                 }
             }
-            void V2()
+            // Create short lines from single points 
+            void HelpingNeighbor()
             {
                 for (int i = 2; i < size - 2; i++)
                 {
                     for (int j = 2; j < size - 2; j++)
                     {
-                        if (i == size - 3 && j == size - 3)
-                        {
-                        }
                         //find the left neighbors 
-                        else if (bv[i, j - 1] == true)
+                        if (bv[i, j - 1] == true)
                         {
                             //find out how to do with them 
                             if (bv[i, j - 2] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 1] == false)
@@ -147,6 +147,21 @@ namespace WpfApp1
                     }
                 }
             }
+            // Сonnecting points diagonally in contact 
+            void Сomplementofdiagonals()
+            {
+                for (int i = 2; i < size - 2; i++)
+                {
+                    for (int j = 2; j < size - 2; j++)
+                    {
+                        if (bv[i, j] == true && bv[i - 1, j + 1] == true && bv[i, j + 1] == false || bv[i, j] == true && bv[i - 1, j - 1] == true && bv[i, j - 1] == false)
+                        {
+                            bv[i - 1, j] = true;
+                        }
+                    }
+                }
+            }
+            // Avoiding the accumulation of corridors more than 3 to 4 adjacent cells 
             void Cliner()
             {
                 for (int i = 2; i < size - 2; i++)
@@ -156,15 +171,9 @@ namespace WpfApp1
                         if (bv[i, j] == true && bv[i - 1, j] == true && bv[i, j + 1] == true && bv[i - 1, j + 1] == true)
                         {
                             if (bv[i - 1, j + 2] != true && bv[i - 2, j + 1] != true) { bv[i - 1, j + 1] = false; }
-                            else if (bv[i, j + 2] != true && bv[i + 1, j + 1] != true)
-                            {
-                                bv[i, j + 1] = false;
-                            }
+                            else if (bv[i, j + 2] != true && bv[i + 1, j + 1] != true){bv[i, j + 1] = false;}
                             else if (bv[i - 1, j - 1] != true && bv[i - 2, j] != true) { bv[i - 1, j] = false; }
-                            else if (bv[i, j - 1] != true && bv[i + 1, j] != true)
-                            {
-                                bv[i, j] = false;
-                            }
+                            else if (bv[i, j - 1] != true && bv[i + 1, j] != true){bv[i, j] = false;}
 
                             else if (bv[i, j + 2] != true || bv[i + 1, j + 1] != true) { bv[i, j + 1] = false; }
                             else if (bv[i - 1, j + 2] != true || bv[i - 2, j + 1] != true) { bv[i - 1, j + 1] = false; }
@@ -174,20 +183,7 @@ namespace WpfApp1
                     }
                 }
             }
-            void Сomplementofdiagonals()
-            {
-                for (int i = 2; i < size - 2; i++)
-                {
-                    for (int j = 2; j < size - 2; j++)
-                    {
-                        //elimination of diagonals - blakades. Сarriage up 
-                        if (bv[i, j] == true && bv[i - 1, j + 1] == true && bv[i, j + 1] == false || bv[i, j] == true && bv[i - 1, j - 1] == true && bv[i, j - 1] == false)
-                        {
-                            bv[i - 1, j] = true;
-                        }
-                    }
-                }
-            }
+            // Selection of the resulting groups
             void GroupAnalysis()
             {
                 // Сleaning from previous run 
@@ -198,7 +194,7 @@ namespace WpfApp1
                 Array.Clear(x2, 0, bustOfWhites);
                 Array.Clear(y1, 0, bustOfWhites);
                 Array.Clear(y2, 0, bustOfWhites);
-                Array.Clear(metagroups, 0, bustOfWhites); 
+                Array.Clear(metagroups, 0, bustOfWhites);
                 z = 0;
                 sequence = 0;
                 group = 0;
@@ -313,9 +309,10 @@ namespace WpfApp1
                     }
                 }
             }
+            // Сreating a connection between different groups
             void Interconnection()
             {
-                
+
                 numberToGenerateX = 0;
                 numberToGenerateY = 0;
                 allResult = 100;
@@ -394,282 +391,110 @@ namespace WpfApp1
 
                 }
             }
+            // Filling free space by extending corridors 
             void FillingEmpty()
             {
-                    for (int i = 0; i < size; i++)
-                    {
-                        for (int j = 0; j < size; j++)
-                        {
-                            if (i > 2 && j > 2 && i < size-3 && j < size - 3)
-                            {
-                                if (bv[i, j] == true)
-                                {
-                                    // если выглядывает право
-                                    if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j + 1] == false)
-                                    {
-                                        memoryI = i;
-                                        memoryJ = j;
-                                        for (int f = 0; f < 100; f++)
-                                        {
-                                        flagA = false;
-                                        //движение вправо
-                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
-                                            {
-                                                if (j+1 < size - 2)
-                                                {
-                                                    bv[i, j + 1] = true;
-                                                    j++;
-                                                    flagA = true;
-                                                    
-                                                }
-                                            }
-                                            //движение влево
-                                            if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                            {
-                                                if (j - 1 > 1)
-                                            {
-                                                    bv[i, j - 1] = true;
-                                                    j--;
-                                                    flagA = true;
-                                            }
-                                            }
-                                            //движение вверх
-                                            if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                            {
-                                                if (i - 1 > 1)
-                                            {
-                                                    bv[i - 1, j] = true;
-                                                    i--;
-                                                    flagA = true;
-                                            }
-                                            }
-                                            //движение вниз
-                                            if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                            {
-                                                if (i + 1 < size - 2)
-                                                {
-                                                    bv[i + 1, j] = true;
-                                                    i++;
-                                                     flagA = true;
-                                            }
-                                            }
-                                            if(flagA == false)
-                                            {
-                                                break;
-                                            }
-                                        }
-                                        i = memoryI;
-                                        j = memoryJ;
-                                    }
-                                    // если выглядывает влево
-                                    if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j - 1] == false)
-                                    {
-                                    memoryI = i;
-                                    memoryJ = j;
-                                    for (int f = 0; f < 100; f++)
-                                    {
-                                        flagA = false;
-                                        //движение вправо
-                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
-                                        {
-                                            if (j + 1 < size - 2)
-                                            {
-                                                bv[i, j + 1] = true;
-                                                j++;
-                                                flagA = true;
-
-                                            }
-                                        }
-                                        //движение влево
-                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                        {
-                                            if (j - 1 > 1)
-                                            {
-                                                bv[i, j - 1] = true;
-                                                j--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вверх
-                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                        {
-                                            if (i - 1 > 1)
-                                            {
-                                                bv[i - 1, j] = true;
-                                                i--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вниз
-                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                        {
-                                            if (i + 1 < size - 2)
-                                            {
-                                                bv[i + 1, j] = true;
-                                                i++;
-                                                flagA = true;
-                                            }
-                                        }
-                                        if (flagA == false)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    i = memoryI;
-                                    j = memoryJ;
-                                }
-                                    // если выглядывает вверх
-                                    if (bv[i - 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
-                                    {
-                                    memoryI = i;
-                                    memoryJ = j;
-                                    for (int f = 0; f < 100; f++)
-                                    {
-                                        flagA = false;
-                                        //движение вправо
-                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
-                                        {
-                                            if (j + 1 < size - 2)
-                                            {
-                                                bv[i, j + 1] = true;
-                                                j++;
-                                                flagA = true;
-
-                                            }
-                                        }
-                                        //движение влево
-                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                        {
-                                            if (j - 1 > 1)
-                                            {
-                                                bv[i, j - 1] = true;
-                                                j--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вверх
-                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                        {
-                                            if (i - 1 > 1)
-                                            {
-                                                bv[i - 1, j] = true;
-                                                i--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вниз
-                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                        {
-                                            if (i + 1 < size - 2)
-                                            {
-                                                bv[i + 1, j] = true;
-                                                i++;
-                                                flagA = true;
-                                            }
-                                        }
-                                        if (flagA == false)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    i = memoryI;
-                                    j = memoryJ;
-                                }
-                                    // если выглядывает вниз
-                                    if (bv[i + 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
-                                    {
-                                    memoryI = i;
-                                    memoryJ = j;
-                                    for (int f = 0; f < 100; f++)
-                                    {
-                                        flagA = false;
-                                        //движение вправо
-                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
-                                        {
-                                            if (j + 1 < size - 2)
-                                            {
-                                                bv[i, j + 1] = true;
-                                                j++;
-                                                flagA = true;
-
-                                            }
-                                        }
-                                        //движение влево
-                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
-                                        {
-                                            if (j - 1 > 1)
-                                            {
-                                                bv[i, j - 1] = true;
-                                                j--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вверх
-                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
-                                        {
-                                            if (i - 1 > 1)
-                                            {
-                                                bv[i - 1, j] = true;
-                                                i--;
-                                                flagA = true;
-                                            }
-                                        }
-                                        //движение вниз
-                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
-                                        {
-                                            if (i + 1 < size - 2)
-                                            {
-                                                bv[i + 1, j] = true;
-                                                i++;
-                                                flagA = true;
-                                            }
-                                        }
-                                        if (flagA == false)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    i = memoryI;
-                                    j = memoryJ;
-                                }
-                                }
-                            }
-                        }
-
-                    }
-            }
-
-
-                СontourAndFuel();
-                V2();
-                Сomplementofdiagonals();
-                Cliner();
-
-                for (int a = 0; a < 1000; a++)
+                for (int i = 0; i < size; i++)
                 {
-                    if (metaflag == true) break;
-
-                    for (int i = 0; i < bustOfWhites; i++)
+                    for (int j = 0; j < size; j++)
                     {
-                        GroupAnalysis();
-                        if(x2[0] == 0 && y2[0] == 0)
+                        if (i > 2 && j > 2 && i < size-3 && j < size - 3)
                         {
-                            metaflag = true;
-                            break;
-                        }
-                        if (g[i] == metaNumber || g[i] == 0) { }
-                        else
-                        {
-                              Interconnection();
-                              break;
+                            if (bv[i, j] == true)
+                            {
+                                // если клетка "выглядывает" в одну из сторон
+                                if (bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j + 1] == false ||
+                                bv[i + 1, j] == false && bv[i - 1, j] == false && bv[i, j - 1] == false ||
+                                bv[i - 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false ||
+                                bv[i + 1, j] == false && bv[i, j + 1] == false && bv[i, j - 1] == false)
+                                {
+                                    memoryI = i;
+                                    memoryJ = j;
+                                    for (int f = 0; f < 100; f++)
+                                    {
+                                        flagA = false;
+                                        //движение вправо
+                                        if (bv[i - 1, j + 1] == false && bv[i, j + 1] == false && bv[i + 1, j + 1] == false && bv[i - 1, j + 2] == false && bv[i, j + 2] == false && bv[i + 1, j + 2] == false)
+                                        {
+                                            if (j+1 < size - 2)
+                                            {
+                                                bv[i, j + 1] = true;
+                                                j++;
+                                                flagA = true;
+                                                
+                                            }
+                                        }
+                                        //движение влево
+                                        if (bv[i - 1, j - 1] == false && bv[i, j - 1] == false && bv[i + 1, j - 1] == false && bv[i - 1, j - 2] == false && bv[i, j - 2] == false && bv[i + 1, j - 2] == false)
+                                        {
+                                            if (j - 1 > 1)
+                                        {
+                                                bv[i, j - 1] = true;
+                                                j--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вверх
+                                        if (bv[i - 1, j - 1] == false && bv[i - 1, j] == false && bv[i - 1, j + 1] == false && bv[i - 2, j - 1] == false && bv[i - 2, j] == false && bv[i - 2, j + 1] == false)
+                                        {
+                                            if (i - 1 > 1)
+                                        {
+                                                bv[i - 1, j] = true;
+                                                i--;
+                                                flagA = true;
+                                            }
+                                        }
+                                        //движение вниз
+                                        if (bv[i + 1, j - 1] == false && bv[i + 1, j] == false && bv[i + 1, j + 1] == false && bv[i + 2, j - 1] == false && bv[i + 2, j] == false && bv[i + 2, j + 1] == false)
+                                        {
+                                            if (i + 1 < size - 2)
+                                            {
+                                                bv[i + 1, j] = true;
+                                                i++;
+                                                 flagA = true;
+                                            }
+                                        }
+                                        if(flagA == false)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    i = memoryI;
+                                    j = memoryJ;
+                                } 
+                            }
                         }
                     }
                 }
-                FillingEmpty();
-                Сomplementofdiagonals();
-                Cliner();
+            }
 
-            // Генеруем имена для позднего свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
+
+            #region Realization  
+
+            СontourAndFuel();
+            HelpingNeighbor();
+            Сomplementofdiagonals();
+            Cliner();
+
+            // Цикл: нахождение групп - создание связи между двумя из них. Повторяется, пока групп более одной.
+            for (int a = 0; a < 1000; a++)
+            {
+                GroupAnalysis();
+                if (x2[0] == 0 && y2[0] == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    Interconnection();
+                }
+            }
+            FillingEmpty();
+            Сomplementofdiagonals();
+            Cliner();
+            #endregion
+
+            // Генерация именён для свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
             for (int i = 1; i < size - 1; i++)
                 {
                     for (int j = 1; j < size - 1; j++)
@@ -677,8 +502,8 @@ namespace WpfApp1
                         name[i, j] = $"Box{i - 1}_{j - 1}";
                     }
                 }
-                // Графическое отображение
-                for (int i = 1; i < size - 1; i++)
+            // Graphic Render 
+            for (int i = 1; i < size - 1; i++)
                 {
                     for (int j = 1; j < size - 1; j++)
                     {
@@ -691,6 +516,6 @@ namespace WpfApp1
                         }
                     }
                 }
-            }
         }
     }
+}
