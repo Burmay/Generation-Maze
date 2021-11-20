@@ -9,27 +9,35 @@ namespace WpfApp1
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    /// 
+    delegate void PlayerStep(System.Windows.Input.KeyEventArgs e);
 
 
     // Задача: создать алгоритм процедурной геренации лабиранта на произвольной площади. Один вход и выход, коридор в одну клетку.
 
+    static class Variable
+    {
+        public static int size = 50;
+        public static bool[,] bv = new bool[size, size];
+        public static string[,] name = new string[size, size];
+    }
 
     public partial class MainWindow : Window
     {
+        int size = Variable.size;
+        bool[,] bv = Variable.bv;
+        string[,] name = Variable.name;
+        Game game = new Game();
 
         public MainWindow()
         {
             Random random = new Random();
             InitializeComponent();
-            int size = 50;
-
             #region Variables for methods 
             int bustOfWhites = (int)(size * size / 2);
             int[] x = new int[bustOfWhites];
             int[] y = new int[bustOfWhites];
             int[] g = new int[bustOfWhites];
-            string[,] name = new string[size, size];
-            bool[,] bv = new bool[size, size];
             int memoryGroup = 0;
             int[] x1 = new int[bustOfWhites];
             int[] y1 = new int[bustOfWhites];
@@ -58,8 +66,6 @@ namespace WpfApp1
 
             //meta
             int[] metagroups = new int[bustOfWhites];
-            int metaNumber = 0;
-            bool metaflag = false;
 
             //FillingEmpty
             int memoryI;
@@ -469,14 +475,14 @@ namespace WpfApp1
             }
 
 
-            #region Realization  
+            #region Realization Lab  
 
             СontourAndFuel();
             HelpingNeighbor();
             Сomplementofdiagonals();
             Cliner();
 
-            // Цикл: нахождение групп - создание связи между двумя из них. Повторяется, пока групп более одной.
+             //Цикл: нахождение групп - создание связи между двумя из них. Повторяется, пока групп более одной.
             for (int a = 0; a < 1000; a++)
             {
                 GroupAnalysis();
@@ -492,30 +498,69 @@ namespace WpfApp1
             FillingEmpty();
             Сomplementofdiagonals();
             Cliner();
+            Render();
             #endregion
-
+            game.CreatedPerson();
+            PlayerRander();
+        }
+        public void Render()
+        {
             // Генерация именён для свзывания с xaml. Имена точно совпадают со всем названиями полей (ячеек) в конструкторе xaml.
             for (int i = 1; i < size - 1; i++)
+            {
+                for (int j = 1; j < size - 1; j++)
                 {
-                    for (int j = 1; j < size - 1; j++)
+                    name[i, j] = $"Box{i - 1}_{j - 1}";
+                }
+            }
+            for (int i = 1; i < size - 1; i++)
+            {
+                for (int j = 1; j < size - 1; j++)
+                {
+                    // Эта строка является магией
+                    FieldInfo field = typeof(MainWindow).GetField(name[i, j],
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (field != null && field.GetValue(this) is TextBox textBox)
                     {
-                        name[i, j] = $"Box{i - 1}_{j - 1}";
+                        textBox.Background = bv[i, j] ? Brushes.White : Brushes.Black;
                     }
                 }
-            // Graphic Render 
+            }
+        }
+        public void PlayerRander()
+        {
             for (int i = 1; i < size - 1; i++)
+            {
+                for (int j = 1; j < size - 1; j++)
                 {
-                    for (int j = 1; j < size - 1; j++)
+                    // Эта строка является магией
+                    FieldInfo field = typeof(MainWindow).GetField(name[i, j],
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (field != null && field.GetValue(this) is TextBox textBox)
                     {
-                        // Эта строка является магией
-                        FieldInfo field = typeof(MainWindow).GetField(name[i, j],
-                            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                        if (field != null && field.GetValue(this) is TextBox textBox)
+                        if(Game.bv[i,j] == 1)
                         {
-                            textBox.Background = bv[i, j] ? Brushes.White : Brushes.Black;
+                            textBox.Background = Brushes.Blue;
+                        }
+                        if(Game.bv[i,j] == 2)
+                        {
+                            textBox.Background = Brushes.Red;
+                        }
+                        if(bv[i,j] == true && Game.bv[i,j] != 1)
+                        {
+                            textBox.Background = Brushes.White;
                         }
                     }
                 }
+            }
+        }
+
+        PlayerStep playerStep = Game.Step;
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            playerStep(e);
+            PlayerRander();
         }
     }
 }
